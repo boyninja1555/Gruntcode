@@ -1,0 +1,7 @@
+id com.example.project;
+
+filedefine App (
+    sub main{ string[] args } (
+        Console.Output("Hello, world!");
+    )
+)

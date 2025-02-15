@@ -1,0 +1,6 @@
+
+export default class App {
+    static main(args = []) {
+        console.log("Hello, world!")
+    }
+}
