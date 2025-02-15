@@ -1,0 +1,75 @@
+/* Colors */
+:root {
+  --bg-0: #080808;
+  --text-0: white;
+  --bg-1: #181818;
+  --text-1: #efefef;
+  --bg-2: #282828;
+  --text-2: #dfdfdf;
+}
+
+/* Tailwind Classes */
+.bg-0 {
+  background-color: var(--bg-0);
+}
+
+.bg-1 {
+  background-color: var(--bg-1);
+}
+
+.bg-2 {
+  background-color: var(--bg-2);
+}
+
+.text-0 {
+  background-color: var(--text-0);
+}
+
+.text-1 {
+  background-color: var(--text-1);
+}
+
+.text-2 {
+  background-color: var(--text-2);
+}
+
+/* Base */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-0);
+  color: var(--text-0);
+}
+
+section {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Headings */
+h1 {
+  font-size: 3.5rem;
+}
+
+h2 {
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6 {
+  font-size: 1.25rem;
+}
