@@ -45,7 +45,7 @@ export default function App() {
 	useEffect(() => {
 		const fetchData = async () => {
 			const getBoilerplate = async (language: string) => {
-				const res = await fetch(`/example/App.${language}`)
+				const res = await fetch(`/example/App.${language}.txt`)
 				const dat = await res.text()
 				return dat
 			}
