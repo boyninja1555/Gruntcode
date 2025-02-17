@@ -1,6 +1,7 @@
 {
   "name": "Gruntcode",
   "short_name": "Gcode",
+  "description": "A code editor made boyninja1555@github.com and project contributors.",
   "id": "https://gcode.flappygrant.com",
   "start_url": "https://gcode.flappygrant.com",
   "icons": [
@@ -17,5 +18,6 @@
   ],
   "theme_color": "#080808",
   "background_color": "#080808",
+  "orientation": "landscape",
   "display": "standalone"
 }
