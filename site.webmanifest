@@ -1,6 +1,8 @@
 {
   "name": "Gruntcode",
   "short_name": "Gcode",
+  "id": "https://gcode.flappygrant.com",
+  "start_url": "https://gcode.flappygrant.com",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
