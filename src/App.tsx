@@ -1,58 +1,124 @@
 import { useState, useEffect } from "react"
 import Editor, { useMonaco } from "@monaco-editor/react"
 
+const EXTENSION_TO_LANGUAGE_MAP: Record<string, string> = {
+	cs: "csharp",
+	css: "css",
+	gmoney: "gmoney",
+	html: "html",
+	java: "java",
+	js: "javascript",
+	txt: "plain",
+	ts: "typescript",
+}
+
+function saveFile(
+	code: string,
+	ext: string,
+	isDownloading: boolean,
+	setIsDownloading: React.Dispatch<React.SetStateAction<boolean>>
+) {
+	if (!isDownloading) {
+		setIsDownloading(true)
+
+		const blob = new Blob([code], { type: "text/plain" })
+		const url = URL.createObjectURL(blob)
+		const downloadLink = document.createElement("a")
+		downloadLink.href = url
+		downloadLink.download = `gruntcode-save-${Math.floor(
+			Math.random() * 1000000000
+		)}.${ext}`
+
+		document.body.appendChild(downloadLink)
+		downloadLink.click()
+		document.body.removeChild(downloadLink)
+		URL.revokeObjectURL(url)
+
+		setTimeout(() => setIsDownloading(false), 5000)
+	}
+}
+
+function uploadFile(
+	setCode: React.Dispatch<React.SetStateAction<string>>,
+	extension: string,
+	setExtension: React.Dispatch<React.SetStateAction<string>>,
+	isUploading: boolean,
+	setIsUploading: React.Dispatch<React.SetStateAction<boolean>>
+) {
+	if (!isUploading) {
+		setIsUploading(true)
+
+		const input = document.createElement("input")
+		input.type = "file"
+		input.accept = `.${extension}`
+
+		input.onchange = async (event: Event) => {
+			const file = (event.target as HTMLInputElement).files?.[0]
+
+			if (file) {
+				const reader = new FileReader()
+				reader.onload = (e) => {
+					const content = e.target?.result as string
+					const ext = file.name.split(".").pop() || "txt"
+
+					setCode(content)
+					setExtension(ext)
+				}
+				reader.readAsText(file)
+			}
+
+			setIsUploading(false)
+		}
+
+		input.click()
+	}
+}
+
 export default function App() {
-	const [language, setLanguage] = useState(new URLSearchParams(location.search).get("lang") || "txt")
+	const initialExtension =
+		new URLSearchParams(window.location.search).get("lang") || "txt"
+	const initialMonacoLanguage =
+		EXTENSION_TO_LANGUAGE_MAP[initialExtension] || initialExtension
+
+	const [extension, setExtension] = useState(initialExtension)
+	const [monacoLanguage, setMonacoLanguage] = useState(initialMonacoLanguage)
 	const [code, setCode] = useState("")
 	const [isDownloading, setIsDownloading] = useState(false)
+	const [isUploading, setIsUploading] = useState(false)
 	const monaco = useMonaco()
 
 	useEffect(() => {
+		setMonacoLanguage(EXTENSION_TO_LANGUAGE_MAP[extension] || extension)
+	}, [extension])
+
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search)
+		const urlExt = params.get("lang") || "txt"
+		setExtension(urlExt)
+	}, [window.location.search])
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const res = await fetch(`/example/boilerplate.${extension}.txt`)
+			const data = await res.text()
+			setCode(data)
+		}
+		fetchData()
+	}, [extension])
+
+	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.ctrlKey && event.key === "s") {
-				event.preventDefault()
-
-				if (!isDownloading) {
-					setIsDownloading(true)
-
-					const blob = new Blob([code], { type: language })
-					const url = URL.createObjectURL(blob)
-					const downloadLink = document.createElement("a")
-					downloadLink.href = url
-					downloadLink.download = `gruntcode-save-${Math.floor(Math.random() * 1000000000 - 1)}.${language}`
-
-					document.body.appendChild(downloadLink)
-					downloadLink.click()
-					document.body.removeChild(downloadLink)
-					URL.revokeObjectURL(url)
-
-					setTimeout(() => setIsDownloading(false), 5000)
+			if (event.ctrlKey) {
+				if (event.key === "s") {
+					event.preventDefault()
+					saveFile(code, extension, isDownloading, setIsDownloading)
 				}
 			}
 		}
 
-		window.addEventListener("keydown", handleKeyDown)
-
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown)
-		}
-	}, [code, language, isDownloading])
-
-	useEffect(() => {
-		setLanguage(new URLSearchParams(location.search).get("lang") || "txt")
-	}, [location.search])
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const getBoilerplate = async (language: string) => {
-				const res = await fetch(`/example/App.${language}.txt`)
-				const dat = await res.text()
-				return dat
-			}
-			setCode(await getBoilerplate(language))
-		}
-		fetchData()
-	}, [language])
+		document.addEventListener("keydown", handleKeyDown)
+		return () => document.removeEventListener("keydown", handleKeyDown)
+	}, [code, extension, isDownloading, isUploading])
 
 	useEffect(() => {
 		if (monaco) {
@@ -73,7 +139,7 @@ export default function App() {
 			})
 			monaco.editor.setTheme("gruntcode-dark")
 
-			// GMONEY language
+			// GMONEY language setup
 			monaco.languages.register({ id: "gmoney" })
 			monaco.languages.setLanguageConfiguration("gmoney", {
 				comments: {
@@ -101,75 +167,55 @@ export default function App() {
 			monaco.languages.setMonarchTokensProvider("gmoney", {
 				defaultToken: "",
 				tokenPostfix: ".gmoney",
-
-				keywords: [
-					"id", "filedefine", "sub",
-				],
-
-				typeKeywords: [
-					"string", "number", "boolean",
-				],
-
+				keywords: ["id", "filedefine", "sub"],
+				typeKeywords: ["string", "number", "boolean"],
 				operators: /[=><!]=?|&&|\|\||\+\+|--|\+|\-|\*|\/|%/,
-
-				escapes: /\\(?:[abfnrtv\\"'0-7xuU]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-
+				escapes: /\\(?:[abfnrtv\\"0-7xuU]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 				tokenizer: {
 					root: [
-						// Identifiers and keywords
 						[/[a-z_$][\w$]*/, {
 							cases: {
 								"@keywords": "keyword",
 								"@typeKeywords": "type",
-								"@default": "identifier"
-							}
+								"@default": "identifier",
+							},
 						}],
-
-						// Whitespace
 						{ include: "@whitespace" },
-
-						// Delimiters and operators
 						[/[\{\}\(\)\[\]]/, "@brackets"],
 						[/@operators/, "operator"],
-
-						// Numbers
 						[/\d+/, "number"],
-
-						// Strings
 						[/"([^"\\]|\\.)*$/, "string.invalid"],
 						[/"/, "string", "@string"],
-
-						// Comments
 						[/\/\/.*$/, "comment"],
-						[/\/\*/, "comment", "@comment"]
+						[/\/\*/, "comment", "@comment"],
 					],
-
 					comment: [
 						[/[^/*]+/, "comment"],
 						[/\*\//, "comment", "@pop"],
-						[/[\/*]/, "comment"]
+						[/[\/*]/, "comment"],
 					],
-
 					string: [
 						[/[^\\"]+/, "string"],
 						[/@escapes/, "string.escape"],
 						[/\\./, "string.escape.invalid"],
-						[/"/, "string", "@pop"]
+						[/"/, "string", "@pop"],
 					],
-
 					whitespace: [
 						[/[ \t\r\n]+/, ""],
 						[/\/\*/, "comment", "@comment"],
-						[/\/\/.*$/, "comment"]
-					]
-				}
+						[/\/\/.*$/, "comment"],
+					],
+				},
 			})
 		}
 	}, [monaco])
 
 	return (
 		<>
-			<div id="sidebar" className="flex flex-col items-center px-[15px] bg-2 w-[256px] h-screen top-0 left-0 fixed">
+			<div
+				id="sidebar"
+				className="flex flex-col items-center px-[15px] bg-2 border-r-[1px] border-[#ccc] w-[256px] h-screen top-0 left-0 fixed"
+			>
 				<a href="#" className="flex items-center gap-[10px] my-[15px] text-2xl h-[50px]">
 					<img src="/android-chrome-512x512.png" alt="Logo" className="h-full" />
 					<span>Gruntcode</span>
@@ -180,27 +226,35 @@ export default function App() {
 					<hr className="my-[5px]" />
 
 					<a href="/?lang=txt">Text</a>
-					<a href="/?lang=csharp">C#</a>
+					<a href="/?lang=cs">C#</a>
 					<a href="/?lang=gmoney">Gmoney</a>
 					<a href="/?lang=java">Java</a>
-					<a href="/?lang=javascript">JavaScript</a>
-					<a href="/?lang=typescript">TypeScript</a>
-
-
-
-					{/**<b className="uppercase mt-[50px]">Pages</b>
-					<hr className="my-[5px]" />
-
-					<a href="/#code-editor">Code Editor</a>
-					<a href="/#runner">Runner</a>**/}
+					<a href="/?lang=js">JavaScript</a>
+					<a href="/?lang=ts">TypeScript</a>
 				</div>
 			</div>
 
 			<div className="overflow-y-hidden">
 				<section id="code-editor" className="ml-[256px]">
+					<ul
+						id="actions-list"
+						className="flex bg-2 border-b-[1px] border-[#ccc] w-full h-[32px]"
+					>
+						<li>
+							<button className="px-[25px] bg-1 border-r-[1px] border-[#ccc] h-full cursor-pointer" onClick={() => saveFile(code, extension, isDownloading, setIsDownloading)}>
+								Save (CTRL+S)
+							</button>
+						</li>
+						<li>
+							<button className="px-[25px] bg-1 border-r-[1px] border-[#ccc] h-full cursor-pointer" onClick={() => uploadFile(setCode, extension, setExtension, isUploading, setIsUploading)}>
+								Upload (No Keybind)
+							</button>
+						</li>
+					</ul>
+
 					<Editor
-						defaultLanguage={language}
-						defaultValue={code}
+						language={monacoLanguage}
+						value={code}
 						theme="gruntcode-dark"
 						onChange={(value) => setCode(value || "")}
 						options={{
@@ -212,10 +266,8 @@ export default function App() {
 
 				<section id="runner" className="ml-[256px] p-[25px]">
 					<h3>Runner feature in development!</h3>
-
 					<hr className="my-[15px]" />
-
-					<p>For now, just input the code into a seperate runner.</p>
+					<p>For now, just input the code into a separate runner.</p>
 				</section>
 			</div>
 		</>

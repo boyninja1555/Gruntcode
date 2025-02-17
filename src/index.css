@@ -48,13 +48,18 @@
 * {
   box-sizing: border-box;
   font-family: "Roboto";
+  overflow: hidden;
+}
+
+.monaco-editor,
+.monaco-editor * {
+  overflow: visible !important;
 }
 
 html,
 body {
   background-color: var(--bg-0);
   color: var(--text-0);
-  overflow-y: hidden;
 }
 
 section {
