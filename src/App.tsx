@@ -235,6 +235,7 @@ export default function App() {
 						<li><a href="/?lang=java">Java</a></li>
 						<li><a href="/?lang=js">JavaScript</a></li>
 						<li><a href="/?lang=ts">TypeScript</a></li>
+						<li><a href="/?lang=html">html</a></li>
 					</ul>
 					<ul className="mt-[25px]">
 						<b className="uppercase">Socials</b>
