@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /example/
 
-Sitemap: https://gcode.flappygrant.com/sitemap.xml
+Sitemap: https://gcode.flappygrant.com/sitemaps/0.xml
