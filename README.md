@@ -10,6 +10,7 @@ Gruntcode is a code editor made by [boyninja1555@github.com](https://www.github.
 - **MAIN PROGRAMMING LANGUAGE:** TypeScript 5.7.2
 - **MAIN FRAMEWORK:** ReactJS 19
 - **SITE STYLING:** TailwindCSS 4.0.6
+- **SITE ICONS:** Font Awesome 6.7.2
 - **CORE FUNCTIONALITY:** Monaco Editor 4.7.0
 - **OTHER:** Vite 6.1.0
 

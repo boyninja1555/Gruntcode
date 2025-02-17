@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react"
 import Editor, { useMonaco } from "@monaco-editor/react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons"
+import { faGlobe } from "@fortawesome/free-solid-svg-icons"
 
 const EXTENSION_TO_LANGUAGE_MAP: Record<string, string> = {
 	cs: "csharp",
@@ -222,15 +225,40 @@ export default function App() {
 				</a>
 
 				<div className="flex flex-col w-full">
-					<b className="uppercase">Languages</b>
-					<hr className="my-[5px]" />
+					<ul>
+						<b className="uppercase">Languages</b>
+						<hr className="my-[5px]" />
 
-					<a href="/?lang=txt">Text</a>
-					<a href="/?lang=cs">C#</a>
-					<a href="/?lang=gmoney">Gmoney</a>
-					<a href="/?lang=java">Java</a>
-					<a href="/?lang=js">JavaScript</a>
-					<a href="/?lang=ts">TypeScript</a>
+						<li><a href="/?lang=txt">Text</a></li>
+						<li><a href="/?lang=cs">C#</a></li>
+						<li><a href="/?lang=gmoney">Gmoney</a></li>
+						<li><a href="/?lang=java">Java</a></li>
+						<li><a href="/?lang=js">JavaScript</a></li>
+						<li><a href="/?lang=ts">TypeScript</a></li>
+					</ul>
+					<ul className="mt-[25px]">
+						<b className="uppercase">Socials</b>
+						<hr className="my-[5px]" />
+
+						<li>
+							<a href="https://www.github.com/boyninja1555/Gruntcode" target="_blank" className="flex items-center gap-[5px]">
+								<FontAwesomeIcon icon={faGithub} />
+								Gruntcode GitHub
+							</a>
+						</li>
+						<li>
+							<a href="https://www.youtube.com/@FloorMann" target="_blank" className="flex items-center gap-[5px]">
+								<FontAwesomeIcon icon={faYoutubeSquare} />
+								Project Owner's YouTube
+							</a>
+						</li>
+						<li>
+							<a href="https://www.flappygrant.com" target="_blank" className="flex items-center gap-[5px]">
+								<FontAwesomeIcon icon={faGlobe} />
+								Project Owner's Website
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 
