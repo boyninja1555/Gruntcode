@@ -188,11 +188,11 @@ export default function App() {
 
 
 
-					<b className="uppercase mt-[50px]">Pages</b>
+					{/**<b className="uppercase mt-[50px]">Pages</b>
 					<hr className="my-[5px]" />
 
 					<a href="/#code-editor">Code Editor</a>
-					<a href="/#runner">Runner</a>
+					<a href="/#runner">Runner</a>**/}
 				</div>
 			</div>
 
