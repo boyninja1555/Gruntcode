@@ -179,12 +179,12 @@ export default function App() {
 					<b className="uppercase">Languages</b>
 					<hr className="my-[5px]" />
 
-					<a href="?lang=txt">Text</a>
-					<a href="?lang=csharp">C#</a>
-					<a href="?lang=gmoney">Gmoney</a>
-					<a href="?lang=java">Java</a>
-					<a href="?lang=javascript">JavaScript</a>
-					<a href="?lang=typescript">TypeScript</a>
+					<a href="/?lang=txt">Text</a>
+					<a href="/?lang=csharp">C#</a>
+					<a href="/?lang=gmoney">Gmoney</a>
+					<a href="/?lang=java">Java</a>
+					<a href="/?lang=javascript">JavaScript</a>
+					<a href="/?lang=typescript">TypeScript</a>
 
 
 
