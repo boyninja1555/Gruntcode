@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import Editor, { useMonaco } from "@monaco-editor/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons"
-import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+import { faGlobe, faGraduationCap } from "@fortawesome/free-solid-svg-icons"
 
 const EXTENSION_TO_LANGUAGE_MAP: Record<string, string> = {
 	cs: "csharp",
@@ -240,9 +240,15 @@ export default function App() {
 
 					</ul>
 					<ul className="mt-[25px]">
-						<b className="uppercase">Socials</b>
+						<b className="uppercase">LINKS</b>
 						<hr className="my-[5px]" />
 
+						<li>
+							<a href="https://tutorials-gcode.flappygrant.com" target="_blank" className="flex items-center gap-[5px]">
+								<FontAwesomeIcon icon={faGraduationCap} />
+								Gruntcode Tutorials
+							</a>
+						</li>
 						<li>
 							<a href="https://www.github.com/boyninja1555/Gruntcode" target="_blank" className="flex items-center gap-[5px]">
 								<FontAwesomeIcon icon={faGithub} />
