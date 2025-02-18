@@ -237,7 +237,6 @@ export default function App() {
 						<li><a href="/?lang=ts">TypeScript</a></li>
 						<li><a href="/?lang=html">html</a></li>
 						<li><a href="/?lang=css">css</a></li>
-
 					</ul>
 					<ul className="mt-[25px]">
 						<b className="uppercase">LINKS</b>
